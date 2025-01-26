@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PropertiesManagementResource.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">properties-management-service</a> &gt; <a href="index.source.html" class="el_package">com.acma.properties.resources</a> &gt; <span class="el_source">PropertiesManagementResource.java</span></div><h1>PropertiesManagementResource.java</h1><pre class="source lang-java linenums">/**
+ * 
+ */
+package com.acma.properties.resources;
+
+import java.util.List;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.acma.properties.beans.PropertyInfoBean;
+import com.acma.properties.services.PropertyInfoService;
+
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+/**
+ * 
+ */
+@RestController
+<span class="nc" id="L27">@Slf4j</span>
+@AllArgsConstructor
+public class PropertiesManagementResource {
+
+	private PropertyInfoService propertyInfoService;
+	
+	@CrossOrigin(allowedHeaders = &quot;*&quot;)
+	@PostMapping(value = {&quot;/propertyInfo&quot;})
+	public ResponseEntity&lt;PropertyInfoBean&gt; savePropertyInfo(@RequestBody PropertyInfoBean propertyInfoBean){
+<span class="nc" id="L36">		log.info(&quot;---PropertyInfo is saving--&gt;&quot;);</span>
+<span class="nc" id="L37">		log.info(&quot;PropertyInfo is &quot;+propertyInfoBean.toString());</span>
+<span class="nc" id="L38">		propertyInfoBean =  propertyInfoService.createProperty(propertyInfoBean);</span>
+<span class="nc" id="L39">		return ResponseEntity.ok(propertyInfoBean);</span>
+	}
+	
+	@CrossOrigin(allowedHeaders = &quot;*&quot;)
+	@GetMapping(value = {&quot;/propertyInfo&quot;})
+	public ResponseEntity&lt;List&lt;PropertyInfoBean&gt;&gt; getAllPropertiesInfo(){
+<span class="nc" id="L45">		log.info(&quot;---Fetching all Properties Information--&gt;&quot;);</span>
+<span class="nc" id="L46">		List&lt;PropertyInfoBean&gt; propertiesList = propertyInfoService.getAllProperties();</span>
+<span class="nc" id="L47">		return ResponseEntity.ok(propertiesList);</span>
+	}
+	
+	@CrossOrigin(allowedHeaders = &quot;*&quot;)
+	@GetMapping(value = {&quot;/propertyInfo/{propertyInfoId}&quot;})
+	public ResponseEntity&lt;PropertyInfoBean&gt; getPropetyById(@PathVariable(&quot;propertyInfoId&quot;) String id){
+<span class="nc" id="L53">		log.info(&quot;---Fetching a Property Information BY Id--&gt;:\t&quot;+id);</span>
+<span class="nc" id="L54">		return ResponseEntity.ok(propertyInfoService.getPropertyInfoById(id));</span>
+	}
+	
+	@CrossOrigin(allowedHeaders = &quot;*&quot;)
+	@DeleteMapping(value = {&quot;/propertyInfo/{propertyInfoId}&quot;})
+	public ResponseEntity&lt;List&lt;PropertyInfoBean&gt;&gt;  deletePropetyById(@PathVariable(&quot;propertyInfoId&quot;) String id){
+<span class="nc" id="L60">		log.info(&quot;---Fetching a Property Information BY Id--&gt;:\t&quot;+id);</span>
+<span class="nc" id="L61">		return ResponseEntity.ok(propertyInfoService.deletePropertyInfoById(id));</span>
+	}
+	
+	@GetMapping(value = {&quot;/propertyInfo/zipcode/{zipCode}&quot;})
+	public ResponseEntity&lt;List&lt;PropertyInfoBean&gt;&gt; getPropetyByZipCode(@PathVariable(&quot;zipCode&quot;) String zipCode){
+<span class="nc" id="L66">		log.info(&quot;---Fetching a Property Information BY zipCode--&gt;:\t&quot;+zipCode);</span>
+<span class="nc" id="L67">		List&lt;PropertyInfoBean&gt; propertiesList = propertyInfoService.getPropertyInfoByZipCode(zipCode);</span>
+<span class="nc" id="L68">		return ResponseEntity.ok(propertiesList);</span>
+	}
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

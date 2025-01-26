@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PropertyTypeServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">properties-management-service</a> &gt; <a href="index.source.html" class="el_package">com.acma.properties.services</a> &gt; <span class="el_source">PropertyTypeServiceImpl.java</span></div><h1>PropertyTypeServiceImpl.java</h1><pre class="source lang-java linenums">/**
+ * 
+ */
+package com.acma.properties.services;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
+import com.acma.properties.beans.PropertyTypeBean;
+import com.acma.properties.models.PropertyType;
+import com.acma.properties.repo.PropertyTypeRepo;
+
+import lombok.extern.slf4j.Slf4j;
+
+/**
+ * 
+ */
+@Service
+<span class="nc" id="L23">@Slf4j</span>
+public class PropertyTypeServiceImpl implements PropertyTypeService {
+
+	private PropertyTypeRepo propertyTypeRepo;
+	
+	private ModelMapper modelMapper;
+	
+<span class="nc" id="L30">	public PropertyTypeServiceImpl(PropertyTypeRepo propertyTypeRepo,ModelMapper modelMapper) {</span>
+<span class="nc" id="L31">		this.propertyTypeRepo = propertyTypeRepo;</span>
+<span class="nc" id="L32">		this.modelMapper = modelMapper;</span>
+<span class="nc" id="L33">	}</span>
+	
+
+	@Override
+	public PropertyTypeBean createPropertyType(PropertyTypeBean type) {
+<span class="nc" id="L38">		log.info(&quot;----PrpertiesType is Creating--&gt;&quot;);</span>
+<span class="nc" id="L39">		log.info(&quot;PropertiesType:\t&quot;+type.toString());</span>
+<span class="nc" id="L40">		PropertyType propertyType = modelMapper.map(type, PropertyType.class);</span>
+		try {
+<span class="nc" id="L42">			propertyType = propertyTypeRepo.save(propertyType);</span>
+<span class="nc" id="L43">			log.info(&quot;---PropertiesType Created--&gt;&quot;);</span>
+<span class="nc" id="L44">			log.info(&quot;ID:\t&quot;+propertyType.getId());</span>
+<span class="nc bnc" id="L45" title="All 4 branches missed.">			if(propertyType != null &amp;&amp; StringUtils.hasText(propertyType.getId())) {</span>
+<span class="nc" id="L46">				return  modelMapper.map(propertyType,PropertyTypeBean.class);</span>
+			}else {
+<span class="nc" id="L48">				throw new RuntimeException(&quot;Issue in Creating the Property Type&quot;);</span>
+			}
+<span class="nc" id="L50">		}catch (Exception e) {</span>
+<span class="nc" id="L51">			e.printStackTrace();</span>
+		}
+<span class="nc" id="L53">		return null;</span>
+		
+	}
+
+	@Override
+	public PropertyTypeBean getPropertyType(String id) {
+<span class="nc" id="L59">		log.info(&quot;--Fetching PropertyType For the Id--&gt;&quot;);</span>
+<span class="nc" id="L60">		log.info(&quot;ID:\t&quot;+id);</span>
+<span class="nc bnc" id="L61" title="All 2 branches missed.">		if(StringUtils.hasText(id)) {</span>
+<span class="nc" id="L62">			return modelMapper.map(propertyTypeRepo.findById(id).get(),PropertyTypeBean.class);</span>
+		}else {
+<span class="nc" id="L64">			throw new RuntimeException(&quot;Provided id is not valid&quot;);</span>
+		}
+	}
+
+
+	@Override
+	public List&lt;PropertyTypeBean&gt; getAllPropertyTypes() {
+<span class="nc" id="L71">		return propertyTypeRepo.findAll().stream().map(propertyType-&gt;modelMapper.map(propertyType, PropertyTypeBean.class)).collect(Collectors.toList());</span>
+		
+	}
+	
+	
+	
+	
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

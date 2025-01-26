@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PropertyInfoServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">properties-management-service</a> &gt; <a href="index.source.html" class="el_package">com.acma.properties.services</a> &gt; <span class="el_source">PropertyInfoServiceImpl.java</span></div><h1>PropertyInfoServiceImpl.java</h1><pre class="source lang-java linenums">/**
+ * 
+ */
+package com.acma.properties.services;
+
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import com.acma.properties.utills.AppUtils;
+import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
+
+import com.acma.properties.beans.AddressBean;
+import com.acma.properties.beans.ConstructionTypeBean;
+import com.acma.properties.beans.OccupancyTypeBean;
+import com.acma.properties.beans.PropertyInfoBean;
+import com.acma.properties.beans.PropertyTypeBean;
+import com.acma.properties.models.PropertyInfo;
+import com.acma.properties.repo.PropertyInfoRepo;
+
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+/**
+ * 
+ */
+@Service
+<span class="fc" id="L32">@Slf4j</span>
+@AllArgsConstructor
+public class PropertyInfoServiceImpl implements PropertyInfoService {
+
+	private PropertyInfoRepo propertyInfoRepo;
+
+	private ModelMapper modelMapper;
+
+	private SearchService searchService;
+
+	@Override
+	public PropertyInfoBean createProperty(PropertyInfoBean type) {
+<span class="fc" id="L44">		PropertyInfo propertyInfoModel = modelMapper.map(type, PropertyInfo.class);</span>
+<span class="fc" id="L45">		log.info(&quot;PropertyINfo Model is :&quot; + propertyInfoModel.toString());</span>
+
+<span class="fc" id="L47">		propertyInfoModel = propertyInfoRepo.save(propertyInfoModel);</span>
+<span class="fc" id="L48">		PropertyInfoBean propertyInfoBean = AppUtils.mapDomainToBean(propertyInfoModel,modelMapper);</span>
+<span class="fc" id="L49">		return propertyInfoBean;</span>
+	}
+
+	@Override
+	public PropertyInfoBean getPropertyInfoById(String id) {
+		try {
+<span class="nc" id="L55">			PropertyInfo propertyInfoModel = propertyInfoRepo.findById(id).get();</span>
+<span class="nc bnc" id="L56" title="All 2 branches missed.">			if (!ObjectUtils.isEmpty(propertyInfoModel)) {</span>
+<span class="nc" id="L57">				return AppUtils.mapDomainToBean(propertyInfoModel,modelMapper);</span>
+			} else {
+<span class="nc" id="L59">				throw new RuntimeException(&quot;No Property Info Found with the Id &quot; + id);</span>
+			}
+<span class="nc" id="L61">		} catch (Exception e) {</span>
+<span class="nc" id="L62">			throw new RuntimeException(e.getLocalizedMessage());</span>
+		}
+
+	}
+	
+	@Override
+	public List&lt;PropertyInfoBean&gt; deletePropertyInfoById(String id) {
+		try {
+<span class="nc" id="L70">			propertyInfoRepo.deleteById(id);</span>
+<span class="nc" id="L71">			return getAllProperties();</span>
+<span class="nc" id="L72">		} catch (Exception e) {</span>
+<span class="nc" id="L73">			throw new RuntimeException(e.getLocalizedMessage());</span>
+		}
+
+	}
+
+	@Override
+	public List&lt;PropertyInfoBean&gt; searchPropertiesByZipCode(String zipCode) {
+<span class="fc" id="L80">		return searchService.searchByName(zipCode);</span>
+	}
+
+	@Override
+	public List&lt;PropertyInfoBean&gt; getAllProperties() {
+		try {
+<span class="nc" id="L86">			List&lt;PropertyInfo&gt; dbPropertiesInfoList = propertyInfoRepo.findAll();</span>
+<span class="nc bnc" id="L87" title="All 4 branches missed.">			if ((!CollectionUtils.isEmpty(dbPropertiesInfoList)) &amp;&amp; (dbPropertiesInfoList.size() &gt; 0)) {</span>
+<span class="nc" id="L88">				return dbPropertiesInfoList.stream().map(propertyInfoModel -&gt; AppUtils.mapDomainToBean(propertyInfoModel,modelMapper))</span>
+<span class="nc" id="L89">						.sorted(Comparator.comparing(PropertyInfoBean::getId).reversed())</span>
+<span class="nc" id="L90">						.collect(Collectors.toList());</span>
+			} else {
+<span class="nc" id="L92">				throw new RuntimeException(&quot;No Properties found&quot;);</span>
+			}
+<span class="nc" id="L94">		} catch (Exception e) {</span>
+<span class="nc" id="L95">			throw new RuntimeException(e.getLocalizedMessage());</span>
+		}
+
+	}
+
+//	private PropertyInfoBean mapDomainToBean(PropertyInfo propertyInfoModel) {
+//		PropertyInfoBean propertyInfoBean = modelMapper.map(propertyInfoModel, PropertyInfoBean.class);
+//		if (propertyInfoModel != null &amp;&amp; propertyInfoModel.getPropertyType() != null) {
+//			propertyInfoBean
+//					.setPropertyTypeBean(modelMapper.map(propertyInfoModel.getPropertyType(), PropertyTypeBean.class));
+//		}
+//		if (propertyInfoModel != null &amp;&amp; propertyInfoModel.getConstructionType() != null) {
+//			propertyInfoBean.setConstructionTypeBean(
+//					modelMapper.map(propertyInfoModel.getConstructionType(), ConstructionTypeBean.class));
+//		}
+//		if (propertyInfoModel != null &amp;&amp; propertyInfoModel.getOccupancyType() != null) {
+//			propertyInfoBean.setOccupancyTypeBean(
+//					modelMapper.map(propertyInfoModel.getOccupancyType(), OccupancyTypeBean.class));
+//		}
+//		if (propertyInfoModel != null &amp;&amp; propertyInfoModel.getAddress() != null) {
+//			propertyInfoBean.setAddressBean(modelMapper.map(propertyInfoModel.getAddress(), AddressBean.class));
+//		}
+//		return propertyInfoBean;
+//	}
+
+	@Override
+	public List&lt;PropertyInfoBean&gt; getPropertyInfoByZipCode(String zipCode) {
+		try {
+<span class="nc" id="L123">			List&lt;PropertyInfo&gt; dbPropertiesInfoList = propertyInfoRepo.findPropertiesInZipCode(zipCode);</span>
+<span class="nc bnc" id="L124" title="All 4 branches missed.">			if (!CollectionUtils.isEmpty(dbPropertiesInfoList) &amp;&amp; dbPropertiesInfoList.size() &gt; 0) {</span>
+<span class="nc" id="L125">				return dbPropertiesInfoList.stream().map(propertyInfoModel -&gt; AppUtils.mapDomainToBean(propertyInfoModel,modelMapper))</span>
+<span class="nc" id="L126">						.collect(Collectors.toList());</span>
+			} else {
+<span class="nc" id="L128">				throw new RuntimeException(&quot;No Properties found with the zipCode &quot;+zipCode);</span>
+			}
+<span class="nc" id="L130">		} catch (Exception e) {</span>
+<span class="nc" id="L131">			throw new RuntimeException(e.getLocalizedMessage());</span>
+		}
+	}
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

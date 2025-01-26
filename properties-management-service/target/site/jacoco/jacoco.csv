@@ -1,0 +1,10 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+properties-management-service,com.acma.properties,PropertiesManagementServiceApplication,12,0,0,0,4,0,3,0,3,0
+properties-management-service,com.acma.properties,Sample,92,0,6,0,14,0,5,0,2,0
+properties-management-service,com.acma.properties.utills,AppUtils,70,0,18,0,15,0,12,0,3,0
+properties-management-service,com.acma.properties.services,ConstructionTypeServiceImpl,15,76,0,2,2,17,1,5,1,4
+properties-management-service,com.acma.properties.services,PropertyInfoServiceImpl,120,34,10,0,25,7,11,3,6,3
+properties-management-service,com.acma.properties.services,SearchService,25,4,0,0,7,1,2,1,2,1
+properties-management-service,com.acma.properties.services,PropertyTypeServiceImpl,109,0,6,0,23,0,9,0,6,0
+properties-management-service,com.acma.properties.resources,PropertiesManagementResource,62,0,0,0,15,0,6,0,6,0
+properties-management-service,com.acma.properties.config,SecurityConfig,51,0,0,0,10,0,2,0,2,0

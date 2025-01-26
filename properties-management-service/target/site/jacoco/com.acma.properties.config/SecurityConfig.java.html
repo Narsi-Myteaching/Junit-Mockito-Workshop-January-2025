@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SecurityConfig.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">properties-management-service</a> &gt; <a href="index.source.html" class="el_package">com.acma.properties.config</a> &gt; <span class="el_source">SecurityConfig.java</span></div><h1>SecurityConfig.java</h1><pre class="source lang-java linenums">/**
+ * 
+ */
+package com.acma.properties.config;
+
+import java.util.Arrays;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+/**
+ * 
+ */
+@Configuration
+<span class="nc" id="L18">public class SecurityConfig {</span>
+
+	@Bean
+	public CorsConfigurationSource corsConfigurationSource() {
+<span class="nc" id="L22">	 UrlBasedCorsConfigurationSource source = </span>
+	 new UrlBasedCorsConfigurationSource();
+<span class="nc" id="L24">	 CorsConfiguration config = new CorsConfiguration();</span>
+<span class="nc" id="L25">	 config.setAllowedOrigins(Arrays.asList(&quot;*&quot;));</span>
+<span class="nc" id="L26">	 config.setAllowedMethods(Arrays.asList(&quot;*&quot;));</span>
+<span class="nc" id="L27">	 config.setAllowedHeaders(Arrays.asList(&quot;*&quot;));</span>
+<span class="nc" id="L28">	 config.setAllowCredentials(false);</span>
+<span class="nc" id="L29">	 config.applyPermitDefaultValues();</span>
+<span class="nc" id="L30">	 source.registerCorsConfiguration(&quot;/**&quot;, config);</span>
+<span class="nc" id="L31">	 return source;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
